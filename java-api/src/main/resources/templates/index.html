@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Bond Information</title>
+</head>
+<body>
+	<div align="center">
+		<h1>Bond List</h1>
+		
+		<div sec:authorize="isAuthenticated()">
+			Welcome <b><span sec:authentication="name">Username</span></b> &nbsp;
+			<i><span sec:authentication="principal.authorities">Roles</span></i>
+		</div>
+		
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Logout" />
+		</form>
+		
+		<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+		<a href="/new">Add Bond</a>
+		</div>
+		
+		<table border="1" cellpadding="10">
+			<thead>
+				<tr>
+					<th>Employee</th>
+					<th>Bond ID</th>
+					<th>Bond Type</th>
+					<th>Face Value</th>
+					<th>Maturity Date</th>
+					<th>Status</th>
+					<th>View Details</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="bond : ${listBond}">
+					<td th:text="${bond.username}">Employee</td>
+					<td th:text="${bond.bid}">Bond ID</td>
+					<td th:text="${bond.type}">Bond Type</td>
+					<td th:text="${bond.faceValue}">Face Value</td>
+					<td th:text="${bond.maturity_date}">Maturity Date</td>
+					<td th:text="${bond.status}">Status</td>
+					<td>
+							<a th:href="@{'/detail/' + ${bond.bid}}">Click here</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
